@@ -1,4 +1,4 @@
-# Tetris
+# Snake
 
 Classic Snake game displayed on LED matrices by an Arduino UNO. 
 
