@@ -11,3 +11,7 @@ Classic Snake game displayed on LED matrices by an Arduino UNO.
 [My own FourMatrix library](https://github.com/flosorin/FourMatrix.git) which requires [Eberhard Fahle's LedControl library](http://wayoda.github.io/LedControl/)
 
 [My own ButtonsController library](https://github.com/flosorin/ButtonsController.git)
+
+## Setup needed
+
+The folder "Levels" needs to be copied on a SD card, in a folder "Snake" from the root of the card.
