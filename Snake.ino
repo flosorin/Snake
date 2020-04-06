@@ -56,7 +56,6 @@ void loop()
     buttons.updateButtonValue();
     modifyMvt(); // Update the movement way if needed (i.e. button pressed)
     movingTimer.update();
-    delay(2);
   }
   else if (isFirstLoopSinceGameOver)
   {
