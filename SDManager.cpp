@@ -66,7 +66,7 @@ TrueBool SDManager::readLevel(const int numLevel)
 void SDManager::writeBestScore(int bestScore)
 {
   File bestScoreFile;
-  String fileName = "Snake/bestScore.txt";
+  String fileName = "Snake/best.txt";
   
   if (SD.exists(fileName)) 
   {
@@ -91,10 +91,10 @@ void SDManager::writeBestScore(int bestScore)
 }
 
 /* Return the best score stored in the dedicated file */
-int getBestScore()
+int SDManager::getBestScore()
 {
   File bestScoreFile;
-  String fileName = "Snake/bestScore.txt";
+  String fileName = "Snake/best.txt";
   
   int i = 0;
   char tmp[10];

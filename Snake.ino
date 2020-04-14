@@ -38,7 +38,8 @@ bool isGameOver = false;
 bool isFirstLoopSinceGameOver = true;
 
 /* Score management */
-int score = 0;
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+int score = 0, bestScore = 0;
 
 /* SD card management (store levels pattern) */
 SDManager SDCard = SDManager(PIN_CS);
@@ -46,6 +47,13 @@ SDManager SDCard = SDManager(PIN_CS);
 void setup() 
 {
   Serial.begin(9600); // Serial for debug
+  
+  /* Initialize score display */
+  lcd.begin(16, 2); // 16 characters on each line, 2 lines
+  int tmpBest = SDCard.getBestScore();
+  bestScore = (tmpBest != -1) ? tmpBest : 0;
+  updateScoreDisplay();
+  
   defineLevel(1); // Load first level pattern
 }
 
@@ -62,6 +70,11 @@ void loop()
     movingTimer.stop(0);
     leds = SDCard.readLevel(0);
     screen.setMultiLED(leds);
+    if (score > bestScore) {
+      bestScore = score;
+      SDCard.writeBestScore(bestScore);
+      updateScoreDisplay();
+    }
     isFirstLoopSinceGameOver = false; 
   }
 }
@@ -120,6 +133,7 @@ void eatingManager()
   if (snake.getHeadX() == apple.x && snake.getHeadY() == apple.y)
   {
     score++;
+    updateScoreDisplay();
 
     /* If score is a multiple of 10, go to next level */
     if (score % 10 == 0)
@@ -184,6 +198,14 @@ void modifyMvt()
        mvtWay = buttonValue;
     }
   }
+}
+
+void updateScoreDisplay()
+{
+  lcd.setCursor(3, 0);
+  lcd.print(String("Score: ") + score);
+  lcd.setCursor(3, 1);
+  lcd.print(String("Best: ") + bestScore);
 }
 
 /* Debug */
