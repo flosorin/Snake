@@ -40,6 +40,7 @@ bool isFirstLoopSinceGameOver = true;
 /* Score management */
 LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 int score = 0, bestScore = 0;
+bool needToIncreaseLvl = false;
 
 /* SD card management (store levels pattern) */
 SDManager SDCard = SDManager(PIN_CS);
@@ -64,6 +65,11 @@ void loop()
     buttons.updateButtonValue();
     modifyMvt(); // Update the movement way if needed (i.e. button pressed)
     movingTimer.update();
+    if (needToIncreaseLvl)
+    {
+      defineLevel((int)(score / 10) + 1);
+      needToIncreaseLvl = false;
+    }
   }
   else if (isFirstLoopSinceGameOver)
   {
@@ -81,9 +87,6 @@ void loop()
 
 void defineLevel(int level)
 {
-  /* Clear screen */
-  screen.setAllLED(false);
-  
   /* Stop the movement and initialize snake position */
   if (level > 1)
   {
@@ -91,6 +94,9 @@ void defineLevel(int level)
     snake.initSnake();
     mvtWay = DOWN;
   }
+
+  /* Clear screen */
+  screen.setAllLED(false);
   
   /* Generate the new screen */
   leds = SDCard.readLevel((level < 8) ? level : 8); // Load level pattern
@@ -138,7 +144,7 @@ void eatingManager()
     /* If score is a multiple of 10, go to next level */
     if (score % 10 == 0)
     {
-      defineLevel((score / 10) + 1);
+      needToIncreaseLvl = true;
     }
     else
     {
